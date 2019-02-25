@@ -1,12 +1,18 @@
+//adds button to sheet
 function onOpen() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet();
   var entries = [{
     name : "Manual Update",
-    functionName : "RunUpdate"
+    functionName : "ManualRunUpdate"
   }];
   sheet.addMenu("Manual Actions", entries);
 };
 
+
+function ManualRunUpdate(){
+  RunUpdate();
+  SendLogData();
+}
 
 
 function RunUpdate() {
@@ -19,18 +25,11 @@ function RunUpdate() {
   WriteData(sheet,outdata, offset); 
 }
 
-//https://ctrlq.org/code/20016-maximum-execution-time-limit
-function isTimeUp_(start) {
-
-}
-
-
 
 function WriteData(sheet, data, offset){
   //future problem if over 26 columns
   var rangestring = "A" + (2 + parseInt(offset)) +":" + String.fromCharCode(64 + data[0].length) + (parseInt(data.length)+1 + parseInt(offset));
   Logger.log("Writting data to range " + rangestring);
-  SendLogData();
   var range = sheet.getRange(rangestring);
   range.setValues(data);
 }
@@ -88,9 +87,7 @@ function ReturnPlatform(data,datatype){
 }
 
 function GetItemPrice(itemname){
-
-
-  //code is not optimized but it works and the bottleneck is request limits from warframe market.
+  //code is not optimized however the bottleneck is request limits from warframe market.
   // 4 sells, 4 buys
   Logger.log("Fetching prices for " +itemname);
   var prices = [];
@@ -105,26 +102,26 @@ function GetItemPrice(itemname){
   var platformCount = 4;
   var data = {
     PC:{
-      Buys:[],
       Sells:[],
+      Buys:[],
       OverflowBuy:[],
       OverflowSell:[]
     },
     PS4:{
-      Buys:[],
       Sells:[],
+      Buys:[],
       OverflowBuy:[],
       OverflowSell:[]
     },
     XBox:{
-      Buys:[],
       Sells:[],
+      Buys:[],
       OverflowBuy:[],
       OverflowSell:[]
     },
     Switch:{
-      Buys:[],
       Sells:[],
+      Buys:[],
       OverflowBuy:[],
       OverflowSell:[]
     }
@@ -189,43 +186,6 @@ function GetItemPrice(itemname){
       }
     }
   }
-  
-//  for (key in Sells){
-//    if (Sells.hasOwnProperty(key)){
-//      Sells[key].sort(function(a, b){return a-b}) //sort ascending
-//      prices.push((Sells[key][0]  === undefined) ? 0 : Sells[key][0] );
-//      var price = 0;
-//      var averageAmount = 0;
-//      for(i=0; i<Sells[key].length && i<averageMax; i++){
-//        price += Sells[key][i];
-//        ++averageAmount;
-//      }
-//      if(averageAmount){
-//        price /=averageAmount;
-//      }
-//      prices.push(price);
-//    }
-//  };
-//  
-//  for ( key in Buys){
-//    if (Buys.hasOwnProperty(key)){
-//      Buys[key].sort(function(a, b){return b-a}) //sort descending
-//      prices.push((Buys[key][0]  === undefined) ? 0 : Buys[key][0] );
-//      var price = 0;
-//      var averageAmount = 0;
-//      for(i=0; i<Buys[key].length && i<averageMax; i++){
-//        price += Buys[key][i]; 
-//        ++averageAmount;
-//      }
-//      if(averageAmount){
-//        price /=averageAmount;
-//      }
-//      prices.push(price);
-//    }
-//  };
-
-
-
 
   return prices;
 }
